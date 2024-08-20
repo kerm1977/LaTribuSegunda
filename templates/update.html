@@ -4,129 +4,136 @@
 
 <!-- Formulario Registro -->
 	<div class="wrap">
+	   	
+	   	<div class="container">
+		    <h1 class="text-center mb-4">ACTUALIZAR MI PERFIL DE USUARIO</h1>
+			<!-- Enlaces para volver a login o a contactos -->
+			<div class="columns">
+			    <div class="column has-text-centered ">
+		        	<ul class="links">
+		            <li class=""><a class="link_register mt-5" href="{{ url_for('contacts')}}">Regresar</a></li>
+		            <li class=""><a class="link_register mt-5" href="{{ url_for('dashboard')}}">DASHBOARD</a></li>
+		            </ul>
 
-   	<div class="container">
-	    <h1 class="text-center mb-4">ACTUALIZAR MI PERFIL DE USUARIO</h1>
-		<!-- Enlaces para volver a login o a contactos -->
-		<div class="columns">
-		    <div class="column has-text-centered ">
-	        	<ul class="links">
-	            <li class=""><a class="link_register mt-5" href="{{ url_for('contacts')}}">Regresar</a></li>
-	            <li class=""><a class="link_register mt-5" href="{{ url_for('dashboard')}}">DASHBOARD</a></li>
-	            </ul>
-
-		    </div>
+			    </div>
+			</div>
 		</div>
-	</div>
-		  
-	<div class="container update_form">
-		<div class="row">
-			<div class="col-md-12 col-xl-6">	
-     	        <form class="form-signin" action="" method="POST" name="form">
-		            {{form.hidden_tag()}}
+			  
+		<div class="container update_form">
+			<div class="row">
+				<div class="col-md-12 col-xl-6">	
+	     	    
+	     	    <form class="form-signin" action="" method="POST" name="form" enctype="multipart/form-data">
+			    {{form.hidden_tag()}}
 
-		        
+			        
 
-            <div class="field"> <!-- MODIFICAR NOMBRE -->
-			  <label class="label">MODIFICAR NOMBRE</label>
-			  <div class="control has-icons-left has-icons-right">
-			  	{{form.username(placeholder="Usuario", class="form-control", value=actualizar_registro.username, id="username")}}
-			  </div>
-			</div>
-
-			<div class="field"> <!-- MODIFICAR PRIMER APELLIDO -->
-			  <label class="label">MODIFICAR PRIMER APELLIDO</label>
-			  <div class="control has-icons-left has-icons-right">
-			  	{{form.apellido(placeholder="Primer Apellido", class="form-control", value=actualizar_registro.apellido, id="apellido")}}
-			  </div>
-			</div>
-
-			<div class="field"> <!-- MODIFICAR SEGUNDO APELLIDO -->
-			  <label class="label">MODIFICAR SEGUNDO APELLIDO</label>
-			  <div class="control has-icons-left has-icons-right">
-			  	{{form.apellido2(placeholder="Segundo Apellido", class="form-control", value=actualizar_registro.apellido2, id="apellido2")}}
-			  </div>
-			</div>
-
-			<div class="field"> <!-- MODIFICAR RESIDENCIA -->
-			  <label class="label">MODIFICAR RESIDENCIA</label>
-			  <div class="control has-icons-left has-icons-right">
-			  	{{form.residencia(placeholder="Residencia", class="form-control", value=actualizar_registro.residencia, id="residencia")}}
-			  </div>
-			</div>
-
-			<div class="field"> <!-- MODIFICAR EMAIL -->
-			  <label class="label">MODIFICAR EMAIL</label>
-			  <div class="control has-icons-left has-icons-right">
-			    {{form.email(placeholder="email", class="form-control", value=actualizar_registro.email, id="email")}}
-			  </div>
-			</div>
-
-			<div class="field"> <!-- MODIFICAR TELEFONO --> 
-			  <label class="label">MODIFICAR TELEFONO</label>
-			  <div class="control has-icons-left has-icons-right">
-			    {{form.telefono(placeholder="Teléfono", class="form-control", value=actualizar_registro.telefono, id="telefono")}}
-			  </div>
-			</div>
-
-
-			<div class="field"> <!-- MODIFICAR TELEFONO EMERGENCIA -->
-			  <label class="label">MODIFICAR TELEFONO</label>
-			  <div class="control has-icons-left has-icons-right">
-			    {{form.telefonoE(placeholder="Teléfono Emergencia", class="form-control", value=actualizar_registro.telefonoE, id="telefonoE")}}
-			  </div>
-			</div>			
-
-
-			<div class="field"> <!-- MODIFICAR CELULAR-->
-			  <label class="label">MODIFICAR CELULAR</label>
-			  <div class="control has-icons-left has-icons-right">
-			    {{form.celular(placeholder="Celular", class="form-control", value=actualizar_registro.celular, id="celular")}}
-			  </div>
-			</div>
-
-			<div class="field"> <!-- MODIFICAR ALERGIAS-->
-			  <label class="label">MODIFICAR ALERGIAS</label>
-			  <div class="control has-icons-left has-icons-right">
-			    {{form.alergias(placeholder="Alergias", class="form-control", value=actualizar_registro.alergias, id="alergias")}}
-			  </div>
-			</div>
-
-			<div class="field"> <!-- MODIFICAR TIPO DE SANGRE-->
-			  <label class="label">MODIFICAR TIPO DE SANGRE</label>
-			  <div class="control has-icons-left has-icons-right">
-			    {{form.tiposangre(placeholder="Tipo de Sangre", class="form-select", value=actualizar_registro.tiposangre, id="tiposangre")}}
-			  </div>
-			</div>
-
-			<div class="field"> <!-- MODIFICAR ENFERMEDADES CRÓNICAS-->
-			  <label class="label">MODIFICAR ENFERMEDADES CRÓNICAS</label>
-			  <div class="control has-icons-left has-icons-right">
-			    {{form.cronico(placeholder="Enfermedades Crónicas", class="form-control",  value=actualizar_registro.cronico, id="cronicos")}}
-			  </div>
-			  <!-- <p class="help is-danger">This email is invalid</p> -->
-			</div>
-
-			<div class="field"> <!-- MODIFICAR MEDICAMENTOS-->
-			  <label class="label">MODIFICAR MEDICAMENTOS</label>
-			  <div class="control has-icons-left has-icons-right">
-			    {{form.medicamentos(placeholder="Medicamentos", class="form-control", value=actualizar_registro.medicamentos, id="medicamentos")}}
-			  </div>
-			</div>
-
-			<div class="field"> <!-- MODIFICAR MEDICAMENTOS-->
-			  <label class="label">MODIFICAR FECHA DE NACIMIENTO</label>
-				<div class="control has-icons-left has-icons-right">
-				    {{form.nacimiento(placeholder="Fecha de Nacimiento", class="form-control", value=actualizar_registro.nacimiento, id="nacimiento")}}
+	            <div class="field"> <!-- MODIFICAR NOMBRE -->
+				  <label class="label">MODIFICAR NOMBRE</label>
+				  <div class="control has-icons-left has-icons-right">
+				  	{{form.username(placeholder="Usuario", class="form-control", value=actualizar_registro.username, id="username")}}
+				  </div>
 				</div>
-			</div>
 
-  			<hr> <!-- BOTON ACTUALIZAR -->
-            <button type="submit" name="Registrarme" action="{{ url_for('dashboard')}}" class="button is-danger is-light mt-5 mr-5">ACTUALIZAR DATOS</button>
-            <a class="button is-warning is-light mt-5 ml-5" href="{{ url_for('dashboard')}}">SALIR</a>
+				<div class="field"> <!-- MODIFICAR PRIMER APELLIDO -->
+				  <label class="label">MODIFICAR PRIMER APELLIDO</label>
+				  <div class="control has-icons-left has-icons-right">
+				  	{{form.apellido(placeholder="Primer Apellido", class="form-control", value=actualizar_registro.apellido, id="apellido")}}
+				  </div>
+				</div>
 
-		    </form>
-	        </div>
+				<div class="field"> <!-- MODIFICAR SEGUNDO APELLIDO -->
+				  <label class="label">MODIFICAR SEGUNDO APELLIDO</label>
+				  <div class="control has-icons-left has-icons-right">
+				  	{{form.apellido2(placeholder="Segundo Apellido", class="form-control", value=actualizar_registro.apellido2, id="apellido2")}}
+				  </div>
+				</div>
+
+				<div class="field"> <!-- MODIFICAR RESIDENCIA -->
+				  <label class="label">MODIFICAR RESIDENCIA</label>
+				  <div class="control has-icons-left has-icons-right">
+				  	{{form.residencia(placeholder="Residencia", class="form-control", value=actualizar_registro.residencia, id="residencia")}}
+				  </div>
+				</div>
+
+				<div class="field"> <!-- MODIFICAR EMAIL -->
+				  <label class="label">MODIFICAR EMAIL</label>
+				  <div class="control has-icons-left has-icons-right">
+				    {{form.email(placeholder="email", class="form-control", value=actualizar_registro.email, id="email")}}
+				  </div>
+				</div>
+
+				<div class="field"> <!-- MODIFICAR TELEFONO --> 
+				  <label class="label">MODIFICAR TELEFONO</label>
+				  <div class="control has-icons-left has-icons-right">
+				    {{form.telefono(placeholder="Teléfono", class="form-control", value=actualizar_registro.telefono, id="telefono")}}
+				  </div>
+				</div>
+
+
+				<div class="field"> <!-- MODIFICAR TELEFONO EMERGENCIA -->
+				  <label class="label">MODIFICAR TELEFONO</label>
+				  <div class="control has-icons-left has-icons-right">
+				    {{form.telefonoE(placeholder="Teléfono Emergencia", class="form-control", value=actualizar_registro.telefonoE, id="telefonoE")}}
+				  </div>
+				</div>			
+
+
+				<div class="field"> <!-- MODIFICAR CELULAR-->
+				  <label class="label">MODIFICAR CELULAR</label>
+				  <div class="control has-icons-left has-icons-right">
+				    {{form.celular(placeholder="Celular", class="form-control", value=actualizar_registro.celular, id="celular")}}
+				  </div>
+				</div>
+
+				<div class="field"> <!-- MODIFICAR ALERGIAS-->
+				  <label class="label">MODIFICAR ALERGIAS</label>
+				  <div class="control has-icons-left has-icons-right">
+				    {{form.alergias(placeholder="Alergias", class="form-control", value=actualizar_registro.alergias, id="alergias")}}
+				  </div>
+				</div>
+
+				<div class="field"> <!-- MODIFICAR TIPO DE SANGRE-->
+				  <label class="label">MODIFICAR TIPO DE SANGRE</label>
+				  <div class="control has-icons-left has-icons-right">
+				    {{form.tiposangre(placeholder="Tipo de Sangre", class="form-select", value=actualizar_registro.tiposangre, id="tiposangre")}}
+				  </div>
+				</div>
+
+				<div class="field"> <!-- MODIFICAR ENFERMEDADES CRÓNICAS-->
+				  <label class="label">MODIFICAR ENFERMEDADES CRÓNICAS</label>
+				  <div class="control has-icons-left has-icons-right">
+				    {{form.cronico(placeholder="Enfermedades Crónicas", class="form-control",  value=actualizar_registro.cronico, id="cronicos")}}
+				  </div>
+				  <!-- <p class="help is-danger">This email is invalid</p> -->
+				</div>
+
+				<div class="field"> <!-- MODIFICAR MEDICAMENTOS-->
+				  <label class="label">MODIFICAR MEDICAMENTOS</label>
+				  <div class="control has-icons-left has-icons-right">
+				    {{form.medicamentos(placeholder="Medicamentos", class="form-control", value=actualizar_registro.medicamentos, id="medicamentos")}}
+				  </div>
+				</div>
+
+				<div class="field"> <!-- MODIFICAR MEDICAMENTOS-->
+				  <label class="label">MODIFICAR FECHA DE NACIMIENTO</label>
+					<div class="control has-icons-left has-icons-right">
+					    {{form.nacimiento(placeholder="Fecha de Nacimiento", class="form-control", value=actualizar_registro.nacimiento, id="nacimiento")}}
+					</div>
+				</div>
+
+				<div class="field"> <!-- MODIFICAR AVATAR-->
+				  <label class="label">MODIFICAR AVATAR</label>
+					<div class="control has-icons-left has-icons-right">
+					    {{form.avatar(placeholder="Avatar", class="form-control", value=actualizar_registro.avatar, id="avatar")}}
+					</div>
+				</div>
+
+	  			<hr> <!-- BOTON ACTUALIZAR -->
+	            <button type="submit" name="Registrarme" action="{{ url_for('dashboard')}}" class="button is-danger is-light mt-5 mr-5">ACTUALIZAR DATOS</button>
+	            <a class="button is-warning is-light mt-5 ml-5" href="{{ url_for('dashboard')}}">SALIR</a>
+		</form>
+	</div>
 
 
 

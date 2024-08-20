@@ -1,7 +1,19 @@
 {% extends "base.html" %}
 {% block content %} 
 <div class="wrap">
-	<div class="container cdcr">
+
+
+	<div class="container text-center mb-5">
+		{%if current_user.avatar%}
+			<img src="{{url_for('static', filename='img/' + current_user.avatar)}}" alt="" width="150" align="center">
+		{%else%}
+			<img src="{{url_for('static', filename='img/logo800.png')}}" alt="" width="200" align="center">
+		{%endif%}
+	</div>
+
+
+
+	<div class="container cdcr mt-5">
 		<h2 class="text-center">Configuración General</h2>
 		<h4 class="text-center text-success">{{ current_user.username | title }}
 			{{current_user.apellido | title}}
@@ -39,6 +51,7 @@
 				  		<li><strong>ENFERMEDADES CRÓNICAS: </strong>{{current_user.cronico | title }}</li>
 				  		<li><strong>MEDICAMENTOS: </strong>{{current_user.medicamentos | title }}</li>
 				  		<li><strong>FECHA NACIMIENTO: </strong>{{current_user.nacimiento | title }}</li>
+				  		<li><strong>AVATAR: </strong>{{current_user.avatar}}</li>
 			  		</ul>
 				{% endif %}
 				
@@ -74,6 +87,7 @@
 					    <li><a class="a_dash" href="{{url_for('post')}}"><span class="icomoon-dash-ico icon-bin"></span> Borrar y editar Posts</a></li>
 					    <li><a class="a_dash" href="{{url_for('advanceSearch')}}"><span class="icomoon-dash-ico icon-binoculars"></span> Buscar Posts</a></li>
 					    <li><a class="a_dash" href="{{url_for('add_Video')}}"><span class="icomoon-dash-ico icon-play"></span> Agregar Videos</a></li>
+					    <li><a class="a_dash" href="{{url_for('add_Video')}}"><span class="icomoon-dash-ico icon-images"></span> Agregar fotos</a></li>
 				
 
 

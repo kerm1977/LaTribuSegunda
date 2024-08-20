@@ -4,7 +4,7 @@
 
 <div class="wrap">
 	<div class="container mb-5">
-		<h1 class="text-center">MULTIMEDIA</h1>
+		<h1 class="text-center"><small>VIDEOS</small> | <a href="{{url_for('fotos')}}"><strong>IMAGENES</strong></a></h1>
 	</div>	
 
 	<br>
@@ -21,7 +21,7 @@
 	{%if current_user.email == "kenth1977@gmail.com" or current_user.email == "jceciliano69@gmail.com"%}  
 		<div class="container">
 			<div class="btn">
-				<a href="{{url_for('add_Video')}}">AGREGAR UN NUEVO VIDEO</a>
+				<a href="{{url_for('add_Video')}}">AGREGAR UN VIDEO</a>
 			</div>
 		</div>
 	{%endif%}

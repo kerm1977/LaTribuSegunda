@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField
 from wtforms import StringField, PasswordField, SelectField, TimeField, SubmitField, BooleanField, HiddenField, EmailField, IntegerField
 from wtforms.validators import DataRequired, Length, Email,  EqualTo, ValidationError
 from wtforms.widgets import TextArea
@@ -19,6 +20,9 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from flask import json
 from werkzeug.exceptions import HTTPException
+from werkzeug.utils import secure_filename #trabaja con imagenes para subirlas a la DB
+import uuid as uuid #trabaja con imagenes para subirlas a la DB
+import os #trabaja con imagenes para subirlas a la DB
 import pymysql.cursors
 # from mysql.connector import
 # print(now_time.strftime('%I:%M:%S %p'))
@@ -98,6 +102,10 @@ def load_user(user_id):
 	return User.query.get(int(user_id))
 # MANEJO DE SESIONES ----
 
+#FOLDER DE IMAGENES QUE FUNCIONA CON LO QUE SE SUBE A TRAVES DE FORMULARIOS DE SUBIDA.
+UPLOAD_FOLDER ="static/img"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 ##########################################################################
 ##########################################################################
 ##########################################################################
@@ -145,7 +153,7 @@ class User(db.Model, UserMixin):
 	cronico				= 	db.Column(db.String(100),	unique=False, 	nullable=True)
 	medicamentos		= 	db.Column(db.String(100),	unique=False, 	nullable=True)
 	nacimiento			= 	db.Column(db.String(20),	unique=False, 	nullable=True)
-	imagen_perfil		= 	db.Column(db.String(20),	nullable=False, default="default.jpg")
+	avatar				= 	db.Column(db.Text,	nullable=False, default="default.jpg")
 	date_added			= 	db.Column(db.DateTime,		nullable=False,	default=datetime.utcnow)
 	# El usuario puede tener muchos posts y "Posts" es el nombre de la clase a la que se va a referenica
 	posts_ref 			= 	db.relationship("Posts", 	backref="user")
@@ -176,13 +184,13 @@ class Posts(db.Model):
 	mascotas			=	db.Column(db.Text)
 	duchas				= 	db.Column(db.Text)
 	banos				= 	db.Column(db.Text)
+	img 				= 	db.Column(db.Text, nullable=True, default="default.jpg")
 	date_posted			=	db.Column(db.DateTime, default=datetime.utcnow)
 	slug 				= 	db.Column(db.String(255))
 
 	#Crear una llave foranea entre los Posts y los usuarios referenciado con la llave primaria del usuario
 	# Donde user.id es la clase del modelo llamada  class User y .id el id de esa clase
 	poster_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-
 
 # AGREGAR ETIQUETAS EN FOMULARIO DEL CURSO HTML
 class Tags(db.Model):
@@ -198,13 +206,24 @@ class multimedia(db.Model):
 	id 					=	db.Column(db.Integer, 		primary_key=True)
 	video				= 	db.Column(db.Text,	unique=False, 	nullable=False)
 	usuario 			= 	db.Column(db.Text,	unique=False,	nullable=True)
-	avatar	 			= 	db.Column(db.Text,	unique=False,	nullable=True)
-	detalle				= 	db.Column(db.Text,	unique=False,	nullable=True)
+	detalle				= 	db.Column(db.Text,	unique=False,	nullable=False)
 	date_added			= 	db.Column(db.DateTime,		nullable=False,	default=datetime.utcnow)
 	#Al agregar un campo hay que migrarlo a la DB y también agregarlo en esta fila con la misma sintaxis y orden
 	
 	def __repr__(self):
-		return f"('{self.video}',{self.usuario}',{self.avatar}','{self.detalle}')"
+		return f"('{self.video}',{self.usuario}','{self.detalle}')"
+
+class imagenes(db.Model):
+	#Al agregar un campo hay que migrarlo a la DB y aquí se crean los campos del usuario
+	id 					=	db.Column(db.Integer, 		primary_key=True)
+	foto				= 	db.Column(db.Text,	unique=False, 	nullable=False)
+	usuario 			= 	db.Column(db.Text,	unique=False,	nullable=True)
+	detalle				= 	db.Column(db.Text,	unique=False,	nullable=False)
+	date_added			= 	db.Column(db.DateTime,		nullable=False,	default=datetime.utcnow)
+	#Al agregar un campo hay que migrarlo a la DB y también agregarlo en esta fila con la misma sintaxis y orden
+	
+	def __repr__(self):
+		return f"('{self.foto}',{self.usuario}','{self.detalle}')"
 
 
 # -----------------------
@@ -241,7 +260,8 @@ class formularioRegistro(FlaskForm):
 	tiposangre 			= 	SelectField		("sangre", validators=[DataRequired()], choices=[("No Indico"),("No Recibo Transfuciones"),("A+"),("A-"),("B+"),("B-"),("AB+"),("AB-"),("O+"),("O-")],)
 	cronico				= 	StringField		('cronica', validators=[ Length(min=3, max=100)])
 	medicamentos		= 	StringField		('medicamentos', validators=[Length(min=3, max=100)])
-	nacimiento			= 	StringField		('nacimiento', validators=[Length(min=3, max=60)])		
+	nacimiento			= 	StringField		('nacimiento', validators=[Length(min=3, max=60)])
+	avatar				=	FileField		('Avatar')
 	submit 				= 	SubmitField		('Registrarme')
 
 	def validate_email(self, email):
@@ -284,6 +304,7 @@ class PostForm(FlaskForm):
 	mascotas			= 	SelectField		("Acepta Mascotas", validators=[DataRequired()], choices=[("SI"),("NO"),("NO APLICA")])				
 	duchas				= 	SelectField		("Hay Duchas", validators=[DataRequired()], choices=[("SI"),("NO"),("NO APLICA")])
 	banos				= 	SelectField		("Servicios Sanitarios", validators=[DataRequired()], choices=[("SI"),("NO"),("NO APLICA")])
+	img 				=	FileField		('Avatar')
 	poster_id 			= 	StringField		("Autor", validators=[DataRequired()])
 	slug 				= 	StringField		("Detalle", validators=[DataRequired()])
 	submit 				= 	SubmitField		("Crear")
@@ -299,7 +320,13 @@ class TagForm(FlaskForm):
 class multimForm(FlaskForm):
 	video				= 	CKEditorField	('video', validators=[DataRequired()])
 	usuario 			= 	StringField		('usuario', validators=[DataRequired()])  
-	avatar 				= 	StringField		('avatar', validators=[DataRequired()])
+	detalle 			= 	StringField		('detalle', validators=[DataRequired()])
+	submit 				= 	SubmitField		("Crear")
+
+# Fotos
+class imagenForm(FlaskForm):
+	foto				= 	FileField		('foto', validators=[DataRequired()])
+	usuario 			= 	StringField		('usuario', validators=[DataRequired()])  
 	detalle 			= 	StringField		('detalle', validators=[DataRequired()])
 	submit 				= 	SubmitField		("Crear")
 
@@ -308,8 +335,6 @@ class SearchForm(FlaskForm):
  # CAMPOS EN DB			   TIPO DE DATO		NOMBRE DE CAMPO EN HTML Y VALIDACIONES
   	searched			= 	StringField		('Buscar', validators=[DataRequired()])	
 
-
-  	
 # -----------------------
 
 ##########################################################################
@@ -343,9 +368,10 @@ def home():
 @app.route("/dashboard", methods=["GET","POST"])
 @login_required #Solo se puede editar con login
 def dashboard():
+	form = formularioRegistro()
 	title = "Configuración"
 	date = datetime.now(timezone('America/Chicago'))
-	return render_template("dashboard.html", title=title, date=date)
+	return render_template("dashboard.html", title=title, form=form, date=date)
 
 # DESCRIPCION DEL SITIO
 @app.route("/siteDescript")
@@ -395,8 +421,20 @@ def update(id):
 		actualizar_registro.cronico 		= request.form["cronico"]
 		actualizar_registro.medicamentos 	= request.form["medicamentos"]
 		actualizar_registro.nacimiento 		= request.form["nacimiento"]
-		try:
+		actualizar_registro.avatar 			= request.files["avatar"]
+
+		#GUARDAR EL NOMBRE DE IMAGEN
+		avatar = secure_filename(actualizar_registro.avatar.filename )
+		# SET UUID
+		nombre_foto = str(uuid.uuid1()) + " " + avatar
+		#SALVAR LA IMAGEN
+		saver = request.files["avatar"]
+		#CAMBIAR A CARACTER PARA SALVAR A DB
+		actualizar_registro.avatar = nombre_foto
+
+		try: 
 			db.session.commit()
+			saver.save(os.path.join(app.config['UPLOAD_FOLDER'],nombre_foto))
 			flash(f"{form.username.data.title()} {form.apellido.data.title()} {form.apellido2.data.title()} ha sido modificad@", "success")
 			return render_template("contacts.html", form=form, date=date, actualizar_registro=actualizar_registro, values=values, users=users)
 		except IntegrityError:
@@ -433,10 +471,23 @@ def update_profile(id):
 		actualizar_registro.cronico 		= 	request.form["cronico"]
 		actualizar_registro.medicamentos 	= 	request.form["medicamentos"]
 		actualizar_registro.nacimiento 		= 	request.form["nacimiento"]
-		
+		actualizar_registro.avatar 			=  	request.files["avatar"]
+
+		#GUARDAR EL NOMBRE DE IMAGEN
+		avatar = secure_filename(actualizar_registro.avatar.filename )
+
+		# SET UUID
+		nombre_foto = str(uuid.uuid1()) + " " + avatar
+
+		#SALVAR LA IMAGEN
+		saver = request.files["avatar"]
 	
+		#CAMBIAR A CARACTER PARA SALVAR A DB
+		actualizar_registro.avatar = nombre_foto
+		
 		try:
 			db.session.commit()
+			saver.save(os.path.join(app.config['UPLOAD_FOLDER'],nombre_foto))
 			flash(f"{form.username.data.title()} {form.apellido.data.title()} {form.apellido2.data.title()} ha sido modificad@", "success")
 		except IntegrityError:
 			db.session.rollback()
@@ -732,14 +783,12 @@ def add_Video():
 
 			#variable  |  Datos dentro de los modelos
 			usuario 	= form.usuario.data,
-			avatar 		= form.avatar.data,
 			detalle 	= form.detalle.data,
 			video 		= form.video.data,
 			)
 
 		#LIMPIAR EL FORMULARIO DESPUES DE ENVIADO
 		form.usuario.data 	= " "
-		form.avatar.data 	= " "
 		form.detalle.data 	= " "
 		form.video.data 	= " "
 
@@ -782,7 +831,6 @@ def edit_video(id):
 	if form.validate_on_submit():
 		#variable  		|  Datos dentro de los modelos
 		item.usuario 	= form.usuario.data
-		item.avatar 	= form.avatar.data
 		item.detalle 	= form.detalle.data
 		item.video 		= form.video.data
 				
@@ -793,7 +841,6 @@ def edit_video(id):
 		return redirect(url_for("individual_vids", id=item.id))
 
 	form.usuario.data 	= item.usuario
-	form.avatar.data 	= item.avatar
 	form.detalle.data 	= item.detalle
 	form.video.data 	= item.video
 
@@ -837,12 +884,19 @@ def page_not_found(e):
 def server_not_found(e):
 	date 	= 	datetime.now(timezone('America/Chicago'))
 	return render_template('500.html',date=date), 500
-# -----------------------
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
 
 
 
-
-
+#IMAGENES
+@app.route("/fotos")
+def fotos():
+	date 	= 	datetime.now(timezone('America/Chicago'))
+	title 	= 	"FOTOGRAFIAS"
+	form = imagenes.query.all()
+	return render_template("fotos.html", title=title, date=date, form=form )
 
 
 # -------------------------------------------------------------------
@@ -873,6 +927,7 @@ if __name__ == "__main__":
 	# 	1.ingresar por medio de heidisql y borrar la tabla creada alembic_version
 	# 	2.borrar la carpeta migraciones dentro del proyecto-Cmder
 	#   3.Volver a setear Flask, inicializarlo, migrarlo etc.. osea pasos de arriba
+	# 	4.Migrar <-- Agrega a la db y luego upgrade <-- guarda el cambio
 	
 # -------------------------------------------------------------------
 # -------------------------------------------------------------------
