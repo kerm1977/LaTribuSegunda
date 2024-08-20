@@ -1,0 +1,308 @@
+{% extends "base.html" %}
+{% block content %} 
+
+
+<!-- Formulario Registro -->
+    <div class="container wrap text-center">
+       	<h1>ACTUALIZAR MI PERFIL DE USUARIO</h1>
+    </div>  
+    
+
+
+    	<!-- Enlaces para volver a login o a contactos -->
+    	<div class="container">
+    		<div class="column has-text-centered ">
+        		<ul class="links">
+            	<li class=" uli signup-active mt-3 mb-5"><a class="link_register mt-5" href="{{ url_for('dashboard')}}">Regresar</a></li>
+            	</ul>
+            </div>
+            
+            <hr>
+		</div>
+
+   	<div class="container">  
+    	<div class="row">
+    		<div class="col-xs-12 col-md-6">
+
+
+    <form class="form-signin" action="" method="POST" name="form">
+        {{form.hidden_tag()}}
+
+
+
+
+
+
+
+
+<!-- MODIFICAR NOMBRE -->
+        <div class="field">
+			<label class="label">MODIFICAR NOMBRE</label>
+			   <div class="control has-icons-left has-icons-right">
+				  	{{form.username(placeholder="Usuario", class="form-control text-success", value=actualizar_registro.username, id="username")}}
+				    <span class="icon is-small is-left">
+				      <i class=""></i>
+				    </span>
+				</div>
+			  <!-- <p class="help is-success">Nombre de Usuario Correcto</p> -->
+		</div>
+		
+
+
+
+
+
+
+
+<!-- MODIFICAR PRIMER APELLIDO -->
+			<div class="field">
+			  <label class="label">MODIFICAR PRIMER APELLIDO</label>
+			  <div class="control has-icons-left has-icons-right">
+			  	{{form.apellido(placeholder="Primer Apellido", class="form-control text-success", value=actualizar_registro.apellido, id="apellido")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+			</div>
+			<!-- <p class="help is-success">Nombre de Usuario Correcto</p> -->
+			</div>
+				
+
+
+
+
+
+
+
+<!-- MODIFICAR SEGUNDO APELLIDO -->
+			<div class="field">
+			  <label class="label">MODIFICAR SEGUNDO APELLIDO</label>
+			  <div class="control has-icons-left has-icons-right">
+			  	{{form.apellido2(placeholder="Segundo Apellido", class="form-control text-success", value=actualizar_registro.apellido2, id="apellido2")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+
+			  </div>
+			  <!-- <p class="help is-success">Nombre de Usuario Correcto</p> -->
+			</div>
+			
+
+
+
+
+
+
+
+<!-- MODIFICAR RESIDENCIA -->
+			<div class="field">
+			  <label class="label">MODIFICAR RESIDENCIA</label>
+			  <div class="control has-icons-left has-icons-right">
+			  	{{form.residencia(placeholder="Residencia", class="form-select  is-rounded", value=actualizar_registro.residencia, id="residencia")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+
+			  </div>
+			  <!-- <p class="help is-success">Nombre de Usuario Correcto</p> -->
+			</div>
+			
+
+
+
+
+				
+		
+
+<!-- MODIFICAR EMAIL -->
+			<div class="field">
+			  <label class="label">MODIFICAR EMAIL</label>
+			  <div class="control has-icons-left has-icons-right">
+			    {{form.email(placeholder="email", class="form-control text-success", value=actualizar_registro.email, id="email")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+
+			  </div>
+			  <!-- <p class="help is-danger">This email is invalid</p> -->
+			</div>
+			
+
+
+
+
+
+
+
+<!-- MODIFICAR TELEFONO -->
+			<div class="field">
+			  <label class="label">MODIFICAR TELEFONO</label>
+			  <div class="control has-icons-left has-icons-right">
+			    {{form.telefono(placeholder="Teléfono", class="form-control text-success", value=actualizar_registro.telefono, id="telefono")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+
+			  </div>
+			  <!-- <p class="help is-danger">This email is invalid</p> -->
+			</div>
+			
+
+
+
+
+
+
+
+
+<!-- MODIFICAR TELEFONO EMERGENCIA -->
+			<div class="field">
+			  <label class="label">MODIFICAR TELEFONO EMERGENCIA #1</label>
+			  <div class="control has-icons-left has-icons-right">
+			    {{form.telefonoE(placeholder="Teléfono Emergencia #1", class="form-control text-success", value=actualizar_registro.telefonoE, id="telefonoE")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+
+			  </div>
+			  <!-- <p class="help is-danger">This email is invalid</p> -->
+			</div>			
+			
+
+
+
+
+
+
+<!-- MODIFICAR CELULAR-->
+			<div class="field">
+			  <label class="label">MODIFICAR TELEFONO EMERGENCIA #2</label>
+			  <div class="control has-icons-left has-icons-right">
+			    {{form.celular(placeholder="Teléfono Emergencia #2", class="form-control text-success", value=actualizar_registro.celular, id="celular")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+
+			  </div>
+			  <!-- <p class="help is-danger">This email is invalid</p> -->
+			</div>
+			
+
+
+
+
+
+
+
+<!-- MODIFICAR ALERGIAS-->
+			<div class="field">
+			  <label class="label">MODIFICAR ALERGIAS</label>
+			  <div class="control has-icons-left has-icons-right">
+			    {{form.alergias(placeholder="Alergias", class="form-control text-success", value=actualizar_registro.alergias, id="alergias")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+
+			  </div>
+			  <!-- <p class="help is-danger">This email is invalid</p> -->
+			</div>
+			
+
+
+
+
+
+
+
+<!-- MODIFICAR TIPO DE SANGRE-->
+			<div class="field">
+			  <label class="label">MODIFICAR TIPO DE SANGRE</label>
+			  <div class="control has-icons-left has-icons-right">
+			    {{form.tiposangre(placeholder="Tipo de Sangre", class="form-select text-success  is-rounded", value=actualizar_registro.tiposangre, id="tiposangre")}}
+			   <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+
+			  </div>
+			  <!-- <p class="help is-danger">This email is invalid</p> -->
+			</div>
+			
+
+
+
+<!-- MODIFICAR ENFEMEDADES CRONICAS-->
+			<div class="field">
+			  <label class="label">MODIFICAR ENFERMEDADES CRÓNICAS</label>
+			  <div class="control has-icons-left has-icons-right">
+			    {{form.cronico(placeholder="Enfermedades Crónicas", class="form-control text-success", value=actualizar_registro.cronico, id="cronicos")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+
+			  </div>
+			  <!-- <p class="help is-danger">This email is invalid</p> -->
+			</div>
+			
+
+
+
+<!-- MODIFICAR MEDICAMENTOS-->
+			<div class="field">
+			  <label class="label">MODIFICAR MEDICAMENTOS</label>
+			  <div class="control has-icons-left has-icons-right">
+			    {{form.medicamentos(placeholder="Medicamentos", class="form-control text-success", value=actualizar_registro.medicamentos, id="medicamentos")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+			  </div>
+			  <!-- <p class="help is-danger">This email is invalid</p> -->
+			</div>
+			
+
+
+<!-- MODIFICAR MEDICAMENTOS-->
+			<div class="field">
+			  <label class="label">MODIFICAR FECHA DE NACIMIENTO</label>
+			  <div class="control has-icons-left has-icons-right">
+			    {{form.nacimiento(placeholder="Fecha de Nacimiento", class="form-control text-success", value=actualizar_registro.nacimiento, id="nacimiento")}}
+			    <span class="icon is-small is-left">
+			      <i class=""></i>
+			    </span>
+			  </div>
+			  <!-- <p class="help is-danger">This email is invalid</p> -->
+			</div>
+			
+
+
+<!-- BOTON ACTUALIZAR -->
+  		<br>
+  		<div class="btn-line mt-4">
+            <button type="submit" name="Registrarme" class="btn btn-success is-light">ACTUALIZAR DATOS</button>
+            <button class="btn btn-danger"><a href="{{ url_for('dashboard')}}">SALIR</a></button>
+        </div>       	
+        </form>
+        </div>
+	        
+	    <div class="col-xs-12 col-md-6">
+	    	<h2 class="text-center">Información</h2>
+			
+			<p>Es importante que la persona participante de nuestro grupo rellene todos los datos que se le solicitan para poder reccionar ante situaciones especiales o de emergencia. Además tome en cuenta que cada vez que modifique algún dato verifique que ninguna casilla fue modificada de manera accidental,  principalmente el tipo de Sangre y los teléfonos de referencia. </p>
+
+			<p><span class="text-danger">Ante la Ley de Protección de la Persona frente al tratamiento de sus datos personales
+			<strong>Nº 8968</strong></span> nos comprometemos a resguardar esta información y será manipulada únicamente bajo condiciones estrictamente de salud o alguna acción que ponga en riesgo la integridad del participante.</p>
+
+			<p>Asegurarse de colocar bien el nombre y los número de teléfono para ser lo más expedita la comunicación  solicitando en la llamada a un conocido de:  <strong>{{ current_user.username | title }}
+ 			{{current_user.apellido | title}}</strong></p>
+
+ 			<p>No omita indicar si permite o no transfuciones de sangre y el tipo de sangre correcto.</p>
+ 			<p>Además si tiene enfermedades crónicas o alergias de algún tipo que sea importante conocer,  no omita colocar esa información.</p>
+		</div>
+       	</div>
+		</div>	
+	</div> 
+</div> 
+
+
+
+{% endblock %}
+
+
