@@ -103,8 +103,23 @@ def load_user(user_id):
 # MANEJO DE SESIONES ----
 
 #FOLDER DE IMAGENES QUE FUNCIONA CON LO QUE SE SUBE A TRAVES DE FORMULARIOS DE SUBIDA.
-UPLOAD_FOLDER ="static/img"
+# SI SE CAMBIA LA RUTA avatars TAMBIEN SE DEBE CAMBIAR EN LAS VISTAS HTML
+UPLOAD_FOLDER ="static/avatars"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+#FOLDER DE IMAGENES QUE FUNCIONA CON LO QUE SE SUBE A TRAVES DE FORMULARIOS DE SUBIDA.
+# SI SE CAMBIA LA RUTA avatars TAMBIEN SE DEBE CAMBIAR EN LAS VISTAS HTML
+UPLOAD_FOLDER_IMG ="static/img"
+app.config['UPLOAD_FOLDER_IMG'] = UPLOAD_FOLDER_IMG
+
+
+
+#FOLDER DE IMAGENES QUE FUNCIONA CON LO QUE SE SUBE A TRAVES DE FORMULARIOS DE SUBIDA.
+# SI SE CAMBIA LA RUTA avatars TAMBIEN SE DEBE CAMBIAR EN LAS VISTAS HTML
+# UPLOAD_FOLDER_POST ="static/ImgPost"
+# app.config['UPLOAD_FOLDER_POST'] = UPLOAD_FOLDER_POST
+
 
 ##########################################################################
 ##########################################################################
@@ -153,7 +168,7 @@ class User(db.Model, UserMixin):
 	cronico				= 	db.Column(db.String(100),	unique=False, 	nullable=True)
 	medicamentos		= 	db.Column(db.String(100),	unique=False, 	nullable=True)
 	nacimiento			= 	db.Column(db.String(20),	unique=False, 	nullable=True)
-	avatar				= 	db.Column(db.Text,	nullable=False, default="default.jpg")
+	avatar				= 	db.Column(db.Text,			nullable=False, default="default.jpg")
 	date_added			= 	db.Column(db.DateTime,		nullable=False,	default=datetime.utcnow)
 	# El usuario puede tener muchos posts y "Posts" es el nombre de la clase a la que se va a referenica
 	posts_ref 			= 	db.relationship("Posts", 	backref="user")
@@ -209,6 +224,7 @@ class multimedia(db.Model):
 	detalle				= 	db.Column(db.Text,	unique=False,	nullable=False)
 	date_added			= 	db.Column(db.DateTime,		nullable=False,	default=datetime.utcnow)
 	#Al agregar un campo hay que migrarlo a la DB y también agregarlo en esta fila con la misma sintaxis y orden
+	poster_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 	
 	def __repr__(self):
 		return f"('{self.video}',{self.usuario}','{self.detalle}')"
@@ -221,6 +237,7 @@ class imagenes(db.Model):
 	detalle				= 	db.Column(db.Text,	unique=False,	nullable=False)
 	date_added			= 	db.Column(db.DateTime,		nullable=False,	default=datetime.utcnow)
 	#Al agregar un campo hay que migrarlo a la DB y también agregarlo en esta fila con la misma sintaxis y orden
+	poster_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 	
 	def __repr__(self):
 		return f"('{self.foto}',{self.usuario}','{self.detalle}')"
@@ -398,55 +415,6 @@ def contacts():
 	date = datetime.now(timezone('America/Chicago'))
 	return render_template("contacts.html", titulo=titulo, values=values, users=users,date=date)
 
-# ACTUALIZAR CONTACTOS
-@app.route("/update/<int:id>", methods=["GET","POST"])
-@login_required #Solo se puede editar con login
-def update(id):
-	date = datetime.now(timezone('America/Chicago'))
-	form = formularioRegistro()
-	values=User.query.all()
-	users= len(values)
-	actualizar_registro = User.query.get_or_404(id)
-	if request.method == "POST":
-		actualizar_registro.username 		= request.form["username"]
-		actualizar_registro.apellido 		= request.form["apellido"]
-		actualizar_registro.apellido2 		= request.form["apellido2"]
-		actualizar_registro.residencia 		= request.form["residencia"]
-		actualizar_registro.email 			= request.form["email"]
-		actualizar_registro.telefono 		= request.form["telefono"]
-		actualizar_registro.telefonoE 		= request.form["telefonoE"]
-		actualizar_registro.celular 		= request.form["celular"]
-		actualizar_registro.alergias 		= request.form["alergias"]
-		actualizar_registro.tiposangre 		= request.form["tiposangre"]
-		actualizar_registro.cronico 		= request.form["cronico"]
-		actualizar_registro.medicamentos 	= request.form["medicamentos"]
-		actualizar_registro.nacimiento 		= request.form["nacimiento"]
-		actualizar_registro.avatar 			= request.files["avatar"]
-
-		#GUARDAR EL NOMBRE DE IMAGEN
-		avatar = secure_filename(actualizar_registro.avatar.filename )
-		# SET UUID
-		nombre_foto = str(uuid.uuid1()) + " " + avatar
-		#SALVAR LA IMAGEN
-		saver = request.files["avatar"]
-		#CAMBIAR A CARACTER PARA SALVAR A DB
-		actualizar_registro.avatar = nombre_foto
-
-		try: 
-			db.session.commit()
-			saver.save(os.path.join(app.config['UPLOAD_FOLDER'],nombre_foto))
-			flash(f"{form.username.data.title()} {form.apellido.data.title()} {form.apellido2.data.title()} ha sido modificad@", "success")
-			return render_template("contacts.html", form=form, date=date, actualizar_registro=actualizar_registro, values=values, users=users)
-		except IntegrityError:
-			db.session.rollback()
-			flash(f"{form.email.data} YA EXISTE", "danger")
-			return render_template("update_profile.html", form=form, date=date, actualizar_registro=actualizar_registro)	
-		except:
-			db.session.commit()
-			flash("Hubo un error al intentar modificar el registro", "warning")
-			return render_template("update.html", form=form, date=date, actualizar_registro=actualizar_registro)
-	else:
-		return render_template("update.html", form=form, date=date, actualizar_registro=actualizar_registro)
 
 # ACTUALIZAR PERFIL SOLO SI ESTÁ LOGUEADO DASHBOARD
 @app.route("/update_profile/<int:id>", methods=["GET","POST"])
@@ -471,34 +439,38 @@ def update_profile(id):
 		actualizar_registro.cronico 		= 	request.form["cronico"]
 		actualizar_registro.medicamentos 	= 	request.form["medicamentos"]
 		actualizar_registro.nacimiento 		= 	request.form["nacimiento"]
-		actualizar_registro.avatar 			=  	request.files["avatar"]
-
-		#GUARDAR EL NOMBRE DE IMAGEN
-		avatar = secure_filename(actualizar_registro.avatar.filename )
-
-		# SET UUID
-		nombre_foto = str(uuid.uuid1()) + " " + avatar
-
-		#SALVAR LA IMAGEN
-		saver = request.files["avatar"]
-	
-		#CAMBIAR A CARACTER PARA SALVAR A DB
-		actualizar_registro.avatar = nombre_foto
 		
-		try:
+		# REVISAR EL AVATAR SI ESTÁ O NO
+		if request.files["avatar"]:
+			actualizar_registro.avatar 			= request.files["avatar"]
+			#GUARDAR EL NOMBRE DE IMAGEN
+			avatar = secure_filename(actualizar_registro.avatar.filename )
+			# SET UUID
+			nombre_foto = str(uuid.uuid1()) + " " + avatar
+			#SALVAR LA IMAGEN
+			saver = request.files["avatar"]
+			#CAMBIAR A CARACTER PARA SALVAR A DB
+			actualizar_registro.avatar = nombre_foto
+
+			try: 
+				db.session.commit()
+				saver.save(os.path.join(app.config['UPLOAD_FOLDER'],nombre_foto))
+				flash(f"{form.username.data.title()} {form.apellido.data.title()} {form.apellido2.data.title()} ha sido modificad@", "success")
+				return render_template("dashboard.html", form=form, date=date, actualizar_registro=actualizar_registro)
+			except IntegrityError:
+				db.session.rollback()
+				flash(f"{form.email.data} YA EXISTE", "danger")
+				return render_template("update_profile.html", form=form, date=date, actualizar_registro=actualizar_registro)	
+			except:
+				db.session.commit()
+				flash("Hubo un error al intentar modificar el registro", "warning")
+				return render_template("uupdate_profile.html", form=form, date=date, actualizar_registro=actualizar_registro)
+		else:
 			db.session.commit()
-			saver.save(os.path.join(app.config['UPLOAD_FOLDER'],nombre_foto))
 			flash(f"{form.username.data.title()} {form.apellido.data.title()} {form.apellido2.data.title()} ha sido modificad@", "success")
-		except IntegrityError:
-			db.session.rollback()
-			flash(f"{form.email.data} YA EXISTE", "danger")
-			return render_template("update_profile.html", form=form, actualizar_registro=actualizar_registro,date=date)
-		except:
-			flash("Hubo un error al intentar modificar el registro", "warning")
-			return render_template("update_profile.html", form=form, actualizar_registro=actualizar_registro,date=date)
-		return render_template("dashboard.html", date=date, form=form, actualizar_registro=actualizar_registro, values=values, users=users)	
+			return render_template("dashboard.html", form=form, date=date, actualizar_registro=actualizar_registro)	
 	else:
-		return render_template("update_profile.html", form=form, actualizar_registro=actualizar_registro,date=date)
+		return render_template("update_profile.html", form=form, date=date, actualizar_registro=actualizar_registro)
 
 # CARD
 @app.route("/card", methods=["GET","POST"])
@@ -774,6 +746,7 @@ def add_Video():
 	date = datetime.now(timezone('America/Chicago'))
 	title = "Agregar Videos" #declarar en html => dentro de h1 como {{title}}
 	value = multimedia.query.order_by(multimedia.date_added)
+	user  = User.query.all()
 	
 	# if form.validate_on_submit() == "POST":
 	if request.method == "POST":
@@ -804,7 +777,7 @@ def add_Video():
 		return redirect("videos")
 
 	#En caso de no agregarlos abre nuevamente el formulario de agregar video
-	return render_template("add_Video.html", form=form, date=date, value=value, title=title)	
+	return render_template("add_Video.html", form=form, date=date, user=user, value=value, title=title)	
 
 #INDIVIDUAL INFO VIDEOS
 #Cada publicación tiene un id para hacer referencia a una nueva publicación
@@ -898,6 +871,11 @@ def fotos():
 	form = imagenes.query.all()
 	return render_template("fotos.html", title=title, date=date, form=form )
 
+
+@app.route("/add_Fotos")
+def add_fotos(id):
+	#obtener una foto de un usuario		
+	pass	
 
 # -------------------------------------------------------------------
 # -------------------------------------------------------------------

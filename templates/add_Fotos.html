@@ -13,18 +13,14 @@
 	<div class="column">
 		<div class="edit_container">
 	
-		<form action="" method="POST">
-			{{ form.hidden_tag() }}
+		<form class="form-signin" action="" method="POST" name="form" enctype="multipart/form-data">
+			    {{form.hidden_tag()}}
 			
 			{{ form.usuario.label(class="label") }}<br>
 			{{ form.usuario(class="form-control is-normal", maxlength="150") }}
 			<br>
 			{{ form.detalle.label(class="label") }}
 			{{ form.detalle(class="form-control is-rounded", maxlength="150") }}
-			<br>
-			{{ form.foto.label(class="label") }}
-			{{ form.foto(class="input is-normal", rows="5") }}
-			
 			<br>
 			{{ form.submit(class="button is-success is-ligh mt-5")}}
 		</form>
