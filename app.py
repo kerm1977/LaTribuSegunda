@@ -168,14 +168,14 @@ class User(db.Model, UserMixin):
 	cronico				= 	db.Column(db.String(100),	unique=False, 	nullable=True)
 	medicamentos		= 	db.Column(db.String(100),	unique=False, 	nullable=True)
 	nacimiento			= 	db.Column(db.String(20),	unique=False, 	nullable=True)
-	avatar				= 	db.Column(db.Text,			nullable=False, default="default.jpg")
+	avatar				= 	db.Column(db.Text,			nullable=False, default="default.png")
 	date_added			= 	db.Column(db.DateTime,		nullable=False,	default=datetime.utcnow)
 	# El usuario puede tener muchos posts y "Posts" es el nombre de la clase a la que se va a referenica
 	posts_ref 			= 	db.relationship("Posts", 	backref="user")
 
 	#Al agregar un campo hay que migrarlo a la DB y también agregarlo en esta fila con la misma sintaxis y orden
 	def __repr__(self):
-		return f"User('{self.username}',{self.apellido}',{self.apellido2}','{self.residencia}','{self.email}','{self.telefono}','{self.celular}','{self.password}','{self.confirmpassword}','{self.alergias}','{self.cronico}','{self.nacimiento}','{self.medicamentos}','{self.imagen_perfil}')"
+		return f"User('{self.username}',{self.apellido}',{self.apellido2}','{self.residencia}','{self.email}','{self.telefono}','{self.celular}','{self.password}','{self.confirmpassword}','{self.alergias}','{self.cronico}','{self.nacimiento}','{self.medicamentos}','{self.avatar}')"
 
 class Posts(db.Model):
 	id 					=	db.Column(db.Integer, primary_key=True)
@@ -199,7 +199,7 @@ class Posts(db.Model):
 	mascotas			=	db.Column(db.Text)
 	duchas				= 	db.Column(db.Text)
 	banos				= 	db.Column(db.Text)
-	img 				= 	db.Column(db.Text, nullable=True, default="default.jpg")
+	img 				= 	db.Column(db.Text, nullable=True, default="default.png")
 	date_posted			=	db.Column(db.DateTime, default=datetime.utcnow)
 	slug 				= 	db.Column(db.String(255))
 
@@ -464,7 +464,7 @@ def update_profile(id):
 			except:
 				db.session.commit()
 				flash("Hubo un error al intentar modificar el registro", "warning")
-				return render_template("uupdate_profile.html", form=form, date=date, actualizar_registro=actualizar_registro)
+				return render_template("update_profile.html", form=form, date=date, actualizar_registro=actualizar_registro)
 		else:
 			db.session.commit()
 			flash(f"{form.username.data.title()} {form.apellido.data.title()} {form.apellido2.data.title()} ha sido modificad@", "success")
