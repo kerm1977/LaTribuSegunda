@@ -4,79 +4,82 @@
 			formatos etc sin eso sale la etiqueta pura -->
 
 
+<div class="wrap">
 
-<div class="container container-post">
-	{%for post in post%}
-
-
-
-		<div class="box">
-	  <article class="media">
-	    <div class="media-left">
-	      <figure class="image is-64x64">
-	        <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
-	      </figure>
-	    </div>
-	    <div class="media-content">
-	      <div class="content">
-	  	      	{{post.titulo|safe}}
-	        <p>
-	          <strong>{{post.user.username}}</strong> <small>{{post.slug|safe}}</small> 
-	          <br>
-	        {{post.content|safe}}
-	        </p>
-
-	      <br>{{post.date_posted.strftime('%d-%m-%Y')}}<br>
-
-	      </div>
-	      <span class="level is-mobile">
-	        <div class="level-left">
-	          <a class="level-item" aria-label="reply">
-	            <span class="icon is-small">
-	              <i class="fas fa-reply" aria-hidden="true"></i>
-	            </span>
-	          </a>
-	          <a class="level-item" aria-label="retweet">
-	            <span class="icon is-small">
-	              <i class="fas fa-retweet" aria-hidden="true"></i>
-	            </span>
-	          </a>
-	          <a class="level-item" aria-label="like">
-	            <span class="icon is-small">
-	              <i class="fas fa-heart" aria-hidden="true"></i>
-	            </span>
-	          </a>
-	          <a class="level-item" aria-label="">
-	          	<a href="{{url_for('posts', id=post.id)}}">
-		            <i class="" aria-hidden="true">VER MAS</i>
-	             </a>
-	          </a>
-
-	           <a class="level-item" aria-label="">
-	          	<a href="{{url_for('add_post', id=post.id)}}">
-		            <i class="" aria-hidden="true">CREAR POST</i>
-	             </a>
-	          </a>
-	          
-	          	          <a class="level-item" aria-label="">
-	          	<a href="{{url_for('edit_post', id=post.id)}}">
-		            <i class="" aria-hidden="true">EDITAR</i>
-	             </a>
-	          </a>
-
-	          <a class="level-item" aria-label="">
-	          	<a href="{{url_for('delete_post', id=post.id)}}">
-		            <i class="" aria-hidden="true">BORRAR</i>
-	             </a>
-	          </a>
-
-	        </div>
-	      </span>
-	    </div>
-	  </article>
-	</div>
-	{%endfor%}
+<div class="container text-center post-title">
+	<h1>{{title}}</h1>
 </div>
+
+{%if current_user.email == "kenth1977@gmail.com" or current_user.email == "jceciliano69@gmail.com"%} 
+	<div class="container create_post_btn">
+		<a href="{{url_for('add_post', id=post.id)}}">
+		<i class="edit_option_post icon-file-empty" aria-hidden="true"></i>CREAR UN NUEVO POST</a>
+	</div>
+{%endif%}
+
+<div class="container">
+	<div class="row">
+			
+
+
+
+			{%for post in post%}
+				<div class="col-xs-12 col-sm-6 col-md-4 col-xl-3 ">
+					<div class="card_post  ">
+					 {{post.titulo|safe}}
+			        <p><strong>{{post.user.username}}</strong> <small>{{post.slug|safe}}</small></p>
+			         <br>
+			        <div class="contenido line-limiter">
+			        	<p class="">{{post.content|safe}}</p>
+			        </div>  
+			        
+			     
+
+			      	<br>{{post.date_posted.strftime('%d-%m-%Y')}}<br>
+					
+				
+					
+				<hr>
+				
+				<div class="social_icons mt-5">
+		          <i class="icon_post fas fa-reply" aria-hidden="true"></i>
+		          <i class="icon_post fas icon-share2" aria-hidden="true"></i>
+		          <i class="icon_post fas fa-heart" aria-hidden="true"></i>
+		    	</div>
+		    	</div>
+
+		       	
+		    		
+
+
+		    		{%if current_user.email == "kenth1977@gmail.com" or current_user.email == "jceciliano69@gmail.com"%}  
+						<hr>
+				       	<div class="editor">
+				 
+				           	<a href="{{url_for('posts', id=post.id)}}">
+					            <i class="edit_option_post icon-eye" aria-hidden="true"></i>
+				            </a>
+				           			             
+				          	<a href="{{url_for('edit_post', id=post.id)}}">
+					            <i class="edit_option_post icon-pencil2" aria-hidden="true"></i>
+				            </a>
+				            
+				          	<a href="{{url_for('delete_post', id=post.id)}}">
+					            <i class="edit_option_post icon-bin" aria-hidden="true"></i>
+				             </a>
+				        </div>
+					{%endif%}
+
+			        
+			    </div>
+			{%endfor%}
+		</div>
+	</div>
+</div>
+
+	
+
+	  	   
 
 
 {% endblock %}

@@ -4,23 +4,15 @@
 <!-- |safe se encarga de reconocer caracteres como negritas, itálicas h1-h6 
 	formatos etc sin eso sale la etiqueta pura -->
 
+<div class="wrap">
 	<div class="container">
-	<div class="box">
-	  <article class="media">
-	    <div class="media-left">
-	      <figure class="image is-64x64">
-	        <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
-	      </figure>
-	    </div>
-	    <div class="media-content">
-	      <div class="content">
+		<div class="row">
 
 
+   <a href="{{url_for('post', id=post.id)}}">
+	    <i class="" aria-hidden="true">Regresar</i>
+   </a>
 
-		   <a href="{{url_for('post', id=post.id)}}">
-			    <i class="" aria-hidden="true">Regresar</i>
-		   </a>
-	
 
 	<article class="media">
 	    <div class="media-left">
@@ -54,6 +46,6 @@
 	  </article>
 	</div>	
 </div>
-
+</div>
 
 {% endblock %}

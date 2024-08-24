@@ -55,29 +55,20 @@ ckeditor = CKEditor(app)
 # dbdir = "sqlite:///" + os.path.abspath(os.getcwd()) + "/db.db" #CONECTOR - RUTA ABSOLUTA
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = dbdir
-	#host = "LaTribuHiking.mysql.pythonanywhere-services.com",
-	#user = "LaTribuHiking",
-	#password = "latribu1977",
-	#database = "LaTribuHiking$db"
+# 	host = "LaTribuHiking.mysql.pythonanywhere-services.com",
+# 	user = "LaTribuHiking",
+# 	password = "latribu1977",
+# 	database = "LaTribuHiking$db"
 
 
 #DB MYSQL LOCAL
 				 #-U  -P  -UBICACION -NOMBRE DB
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:root@localhost/db"
 
+											                   # -U          -P                 -UBICACION                             -NOMBRE DB
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://LaTribuHiking:CR129x7848n@LaTribuHiking.mysql.pythonanywhere-services.com/LaTribuHiking$db"
+###########################################################################
 
-
-#DB MYSQL PYTHONANYWHERE INSTALAR
-#pip uninstall mysql-connector-python-8.0.6
-#pip install mysql-connector-python
-# pip3  install mysql-connector-python
-# pip3  install mysql-connector		
-											                 #-U          -P                      -UBICACION                          -NOMBRE DB
-#app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://LaTribuHiking:latribu1977@LaTribuHiking.mysql.pythonanywhere-services.com/LaTribuHiking$db"
-
-##########################################################################
-##########################################################################
-##########################################################################
 
 # OTRA CONFIGURACIÓN
 db = SQLAlchemy(app)
@@ -678,16 +669,19 @@ def delete_post(id):
 @app.route("/post")
 @login_required #Solo se puede editar con login
 def post():
+	title = "CAMINATAS DE LA TRIBU"
 	date = datetime.now(timezone('America/Chicago')) 
 	post = Posts.query.order_by(Posts.date_posted)
-	return render_template("post.html", post=post, date=date)
+	return render_template("post.html",  title=title, post=post, date=date)
 
 # LEER POST INDIVIDUALMENTE
 @app.route("/posts/<int:id>")
 #@login_required
 def posts(id):
+	date = datetime.now(timezone('America/Chicago')) 
 	post = Posts.query.get_or_404(id)
-	return render_template("posts.html", post=post)
+	title = "CAMINATAS"
+	return render_template("posts.html", title=title, post=post, date=date)
 
 
 # -------------------------------------------------------------------
@@ -885,7 +879,7 @@ if __name__ == "__main__":
 	db.create_all()
 	# db.upgrade_all()
 	# db.drop_all()	#Solo se ejecuta para migrar nuevos campos a la db pero borra el contenido
-	app.run(debug = True) 
+	app.run(debug = True, port=3000) 
 
 
 
@@ -906,6 +900,10 @@ if __name__ == "__main__":
 	# 	2.borrar la carpeta migraciones dentro del proyecto-Cmder
 	#   3.Volver a setear Flask, inicializarlo, migrarlo etc.. osea pasos de arriba
 	# 	4.Migrar <-- Agrega a la db y luego upgrade <-- guarda el cambio
+	# PYTHONANYWHERE
+	# LaTribuHiking
+	# latribu1977
+	# drop database LaTribuHiking$db
 	
 # -------------------------------------------------------------------
 # -------------------------------------------------------------------

@@ -1,0 +1,53 @@
+.create_post_btn{
+	margin-bottom: 40px;
+}
+
+
+.post-title{
+	margin-bottom: 50px;
+}
+
+.card_post{
+	border: 1px solid rgba(233,82,30,0.6);
+	margin: auto;
+	padding: 25px;
+	border-radius: 15px;
+	height: auto;
+}
+
+/*DELIMITADOR DE LINEAS POR POST HASTA 3 MAXIMO*/
+.line-limiter{
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	line-clamp: 3;
+	overflow: hidden;
+}
+/*DELIMITADOR DE LINEAS MUESTRA TODO EL TEXTO AL PRECIONARLO*/
+.line-limiter:active{
+	display: block;
+}	
+
+
+
+.editor{
+	display: inline-flex;
+}
+
+.social_icons{
+	display: inline-flex;
+}
+
+.social_icons i{
+	margin-left: 20px;
+	font-size: 20px;
+	margin-bottom: 40px;
+}
+
+
+.edit_option_post{
+	margin-left: 20px;
+	font-size: 20px;
+	text-align: center;
+	color: rgba(233,82,30,0.6);
+}
